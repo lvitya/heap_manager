@@ -39,9 +39,6 @@ void* my_malloc(size_t size){
     if (pHead->size == 1 && pHead->pNext == NULL) { // if only Head block left
         return NULL;
     }
-    /*1if (pHead == NULL) { // no more free blocks
-        return NULL;
-    }1*/
 
     struct mem_block* pCurrent = pHead;
     size_t bytes_for_block = offsetof(struct mem_block, payload) + size; // (space for mem_block->size) + requested_bytes
@@ -77,9 +74,6 @@ void* my_malloc(size_t size){
         if (pCurrent->pNext != NULL) { // if there is next free block
             pCurrent->pNext->pPrev = pCurrent->pPrev;
         }
-        /*1 if (pCurrent->pPrev == NULL && pCurrent->pNext == NULL) { // drop last free block
-            pHead = NULL;
-        }1*/
     }
 
     return (void*) p;
@@ -88,14 +82,6 @@ void* my_malloc(size_t size){
 void my_free(void* p){ // insert current allocated block to free list
     struct mem_block* pFreed;
     pFreed = (struct mem_block *)((char*)p - offsetof(struct mem_block, payload));
-
-    /*1if (pHead == NULL) { // free list has been exhausted
-        // set pHead to the block
-        pHead = pFreed;
-        pHead->pNext = NULL;
-        pHead->pPrev = NULL;
-        return;
-    }1*/
 
     // insert block sorted by address
     struct mem_block* pCurrent = pHead;
